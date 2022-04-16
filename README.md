@@ -1,0 +1,2 @@
+# classCommandSystem
+JsMacros command system.
