@@ -19,7 +19,7 @@ module.exports = class PingCommand extends Command {
      * @param {Array<String>} args 
      */
     run(client, message, args) {
-        Chat.log("Pong!" + "info");
+        Chat.log("Pong!" + "info11");
         Time.sleep(1000);
         Chat.log("info");
     }
