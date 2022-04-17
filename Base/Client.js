@@ -1,13 +1,10 @@
 module.exports = class ChatCommander {
     constructor(options) {
-        this.prefix = options.config.prefix || ".";
-        this.chatPrefix = "[Chat]";
-        this.config = options.config || JsMacros.open(__dirname + "/../../config.json") || ".";
+        this.config = FS.exists(options.config) ? JSON.parse(FS.open(options.config).read()) : null;
+        this.prefix = this.config !== null ? this.config.prefix ? this.config.prefix : "." : ".";
+        this.chatPrefix = this.config !== null ? this.config.chatPrefix ? this.config.chatPrefix : "[Chat]" : "[Chat]";
         this.commands = new Map();
         this.aliases = new Map();
-        // this.events = new Map();
-        // this.loadCommands = this.loadCommands.bind(this);
-        // return this;
     }
 
     loadCommands() {
@@ -38,16 +35,15 @@ module.exports = class ChatCommander {
                 size++;
                 let eventName = file.split(".")[0];
                 let fakeEvent = JsMacros.createCustomEvent(eventName.toLowerCase() + "_event");
-
                 JsMacros.on(eventName,
                     JavaWrapper.methodToJava((event) => {
-                        if (eventName.toLowerCase().includes("message") && event.message.startsWith(this.prefix)) {
+                        if (eventName.toLowerCase().includes("sendmessage") && event.message.startsWith(this.prefix) && event.message.length > this.prefix.length) {
                             fakeEvent.putString("message", event.message);
                             fakeEvent.putObject("client", this);
-                            JsMacros.runScript("chatCommands/events/" + file, fakeEvent);
+                            JsMacros.runScript(__dirname + "/../events/" + file, fakeEvent);
                             event.message = "";
                         } else if (!eventName.toLowerCase().includes("message")) {
-                            JsMacros.runScript("chatCommands/events/" + file, event);
+                            JsMacros.runScript(__dirname + "/../events/" + file, event);
                         }
                     })
                 );
@@ -57,7 +53,6 @@ module.exports = class ChatCommander {
     }
 
     /**
-     * 
      * @param {String} args 
      */
     log(...args) {
