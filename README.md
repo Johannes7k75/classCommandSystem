@@ -5,7 +5,7 @@ JsMacros command system.
 ## Setup
 
 Download this repo or clone it with `git clone https://github.com/Johannes7k75/classCommandSystem`  
-Place it in the `Macros` folder, put the `index.js` on the `JoinServer` event.
+**Place it in the `Macros` folder**, put the __`index.js`__ on the __`JoinServer`__ event.
 
 I recommend it on `JoinServer` because it closes the Script Context on `Disconnect` to avoid any erros.
 
