@@ -1,15 +1,11 @@
 const reverse = !GlobalVars.getBoolean("ToggleChatCommands");
 const chatCommands = GlobalVars.getObject("ChatCommandsCtx");
+console.log(GlobalVars.getBoolean("ToggleChatCommands"));
 GlobalVars.putBoolean("ToggleChatCommands", reverse);
 if (reverse) {
-    // If true   
     GlobalVars.putObject("ChatCommandsCtx", JsMacros.runScript(__dirname + "/ChatCommands.js").getCtx());
-    JsMacros.once("Disconnect", JavaWrapper.methodToJava(() => {
-        GlobalVars.getObject("ChatCommandsCtx").closeContext();
-    }));
 }
-// else {
-//     // If false
-//     Chat.log("ChatCommands disabled");
-//     GlobalVars.getObject("ChatCommandsCtx").closeContext();
-// }
+JsMacros.on("Disconnect", JavaWrapper.methodToJava(() => {
+    GlobalVars.putBoolean("ToggleChatCommands", !GlobalVars.getBoolean("ToggleChatCommands"));
+    GlobalVars.getObject("ChatCommandsCtx").closeContext();
+}));
