@@ -1,5 +1,6 @@
 const message = event.getString("message");
 const client = event.getObject("client");
+const chatVarPrefix = "$$";
 
 if (message.toLowerCase().startsWith(client.prefix)) {
     let args = message.toLowerCase().slice(client.prefix.length).trim().split(/ +/g);
@@ -7,8 +8,8 @@ if (message.toLowerCase().startsWith(client.prefix)) {
     let command = client.commands.get(cmd) || client.aliases.get(cmd);
 
     for (let arg of args) {
-        if (client.vars.get(arg)) {
-            args[args.indexOf(arg)] = client.vars.get(arg);
+        if (args.startsWith(chatVarPrefix) && client.vars.get(arg.replace(chatVarPrefix, ""))) {
+            args[args.indexOf(arg.replace(chatVarPrefix, ""))] = client.vars.get(arg.replace(chatVarPrefix, ""));
         }
     }
 
