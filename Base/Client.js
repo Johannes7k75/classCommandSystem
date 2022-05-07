@@ -3,6 +3,7 @@ module.exports = class ChatCommander {
         this.config = FS.exists(options.config) ? JSON.parse(FS.open(options.config).read()) : null;
         this.prefix = this.config !== null ? this.config.prefix ? this.config.prefix : "." : ".";
         this.chatPrefix = this.config !== null ? this.config.chatPrefix ? this.config.chatPrefix : "[Chat]" : "[Chat]";
+        this.vars = new Map();
         this.commands = new Map();
         this.aliases = new Map();
     }
@@ -50,6 +51,17 @@ module.exports = class ChatCommander {
             }
         }
         this.log("Loaded", size, "events.");
+    }
+
+    /**
+     * 
+     * @param {Object} vars 
+     */
+    setvars(vars = {}) {
+        for (let i = 0; i < Object.keys(vars).length; i++) {
+            this.vars.set(Object.keys(vars)[i], vars[Object.keys(vars)[i]]);
+        }
+        this.log("Set", this.vars.size, "variables.");
     }
 
     /**
