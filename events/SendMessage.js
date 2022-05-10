@@ -8,8 +8,11 @@ if (message.toLowerCase().startsWith(client.prefix)) {
     let command = client.commands.get(cmd) || client.aliases.get(cmd);
 
     for (let arg of args) {
-        if (args.startsWith(chatVarPrefix) && client.vars.get(arg.replace(chatVarPrefix, ""))) {
-            args[args.indexOf(arg.replace(chatVarPrefix, ""))] = client.vars.get(arg.replace(chatVarPrefix, ""));
+        if (arg.startsWith(chatVarPrefix) && client.vars.get(arg.replace(chatVarPrefix, ""))) {
+            args[args.indexOf(arg)] = client.vars.get(arg.replace(chatVarPrefix, ""));
+        }
+        if (arg.startsWith(chatVarPrefix) && arg.replace(chatVarPrefix, "") === ("curpos" || "curposr")) {
+            args[args.indexOf(arg)] = arg.replace(chatVarPrefix, "") === "curposr" ? `${Math.floor(Player.getPlayer().getX())}, ${Math.floor(Player.getPlayer().getY())}, ${Math.floor(Player.getPlayer().getZ())}` : Player.getPlayer().getPos().toString();
         }
     }
 
